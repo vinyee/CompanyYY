@@ -1,0 +1,5 @@
+/Users/vincentmicrosoft/Projects/CompanyY/CompanyY/bin/Debug/CompanyY.exe
+/Users/vincentmicrosoft/Projects/CompanyY/CompanyY/bin/Debug/CompanyY.pdb
+/Users/vincentmicrosoft/Projects/CompanyY/CompanyY/obj/x86/Debug/CompanyY.csproj.CoreCompileInputs.cache
+/Users/vincentmicrosoft/Projects/CompanyY/CompanyY/obj/x86/Debug/CompanyY.exe
+/Users/vincentmicrosoft/Projects/CompanyY/CompanyY/obj/x86/Debug/CompanyY.pdb
