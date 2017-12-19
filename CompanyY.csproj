@@ -40,12 +40,19 @@
     <Compile Include="Classes\Users\UserManager.cs" />
     <Compile Include="Classes\Floors\Floors.cs" />
     <Compile Include="Classes\Users\UserRegister.cs" />
+    <Compile Include="Classes\Users\UserLogin.cs" />
+    <Compile Include="Classes\Floors\FloorJobs.cs" />
+    <Compile Include="Classes\Floors\FloorLoggedIn.cs" />
+    <Compile Include="Classes\Jobs\Interview\InterviewClass.cs" />
+    <Compile Include="Classes\Jobs\Interview\InterviewManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Classes\" />
     <Folder Include="Classes\Users\" />
     <Folder Include="Utilities\" />
     <Folder Include="Classes\Floors\" />
+    <Folder Include="Classes\Jobs\" />
+    <Folder Include="Classes\Jobs\Interview\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

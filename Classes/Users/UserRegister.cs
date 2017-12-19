@@ -7,6 +7,13 @@ namespace CompanyY.Classes.Users
         {
         }
 
+		public void NewRegister()
+		{
+            User user = CompanyEnvironment.Usermanager.RegisterNewUser();
+
+			CompanyEnvironment.Userregister.Register(user, 0, false);
+		}
+
         public void Register(User candidate, int level = 0, bool finished = false)
         {
             switch (level)
@@ -29,122 +36,95 @@ namespace CompanyY.Classes.Users
             }
         }
 
-        public bool ValidName(string name)
+        public void RegisterFinished(User user)
         {
-            if (name.Length > 2 && name.Length < 10)
-                if (CompanyEnvironment.Texts.OnlyLetters(name))
-                    return true;
-
-            return false;
-        }
-
-        public void RegisterFinished(User candidate)
-        {
-            string choice;
-
             Console.Clear();
             Console.WriteLine("Du har nu registrerat dig, innan vi går vidare " +
                               "kommer vi att visa din data, är det något du vill ändra på? " +
-                              "Skriv fortsätt annars skriv ändra." + 
                               Environment.NewLine);
 
-            CompanyEnvironment.Usermanager.ShowCandidate(candidate);
+            CompanyEnvironment.Usermanager.ShowUserData(user);
 
-            choice = Console.ReadLine().ToLower();
+			string[] Options = new string[2];
+			Options[0] = "Jag är klar, ta mig vidare!";
+			Options[1] = "Jag tror jag vill ändra på något mer";
 
-            while (true)
+			int option = CompanyEnvironment.Texts.Menu(Options);
+
+            if (option == 0)
             {
-                if (choice.ToLower() == "fortsätt")
-                {
-                    
-                    CompanyEnvironment.Usermanager.AddCandidate(candidate);
-                    CompanyEnvironment.Floor.UserLoginRegister();
-                    return;
-                }
-                else if (choice.ToLower() == "ändra")
-                {
-                    while (true)
-                    {
-                        Console.Clear();
-                        CompanyEnvironment.Usermanager.ShowCandidate(candidate);
-
-                        Console.WriteLine("Vad vill du ändra? " + Environment.NewLine +
-                                          "namn, efternamn, födelseår, titel" + 
-                                          Environment.NewLine);
-
-                        Console.WriteLine("Ifall du är klar, skriv fortsätt" + 
-                                          Environment.NewLine);
-
-                        switch (Console.ReadLine().ToLower())
-                        {
-                            case "fortsätt":
-                            case "klar":
-                                {
-                                    CompanyEnvironment.Usermanager.AddCandidate(candidate);
-
-                                    Console.Clear();
-                                    Console.WriteLine("Grattis du är nu medlem, " +
-                                                      "du kan logga in!" + 
-                                                      Environment.NewLine);
-                                    
-                                    CompanyEnvironment.Floor.UserLoginRegister();
-                                }
-								return;
-
-                            case "namn":
-                                RegisterName(candidate, 0, true);
-                                break;
-
-                            case "efternamn":
-                                RegisterLastname(candidate, 1, true);
-                                break;
-
-                            case "födelseår":
-                                RegisterAge(candidate, 2, true);
-                                break;
-
-                            case "titel":
-                                RegisterTitle(candidate, 3, true);
-                                break;
-                        }
-                    }
-                }
-                else
-                {
-                    Console.Clear();
-                    Console.WriteLine("Du kan bara välja mellan fortsätt och ändra just nu.");
-                    Console.WriteLine("Vill du ändra eller fortsätta? Skriv " +
-                                      "fortsätt annars skriv ändra" + 
-                                      Environment.NewLine);
-                }
-            }
-
-        }
-
-        public void RegisterTitle(User candidate, int level, bool finished = false)
-        {
-            Console.WriteLine("Är du en utvecklare, arkitekt eller säljare?");
-            string title = Console.ReadLine();
-
-            if (title.ToLower() != "utvecklare" &&
-                title.ToLower() != "arkitekt" &&
-                title.ToLower() != "säljare")
-            {
-                Console.WriteLine("Något blev fel, " +
-                    "se till att du skriver antingen utvecklare, arkitekt eller säljare!");
-
-                Register(candidate, level, finished);
+                Console.Clear();
+                CompanyEnvironment.Usermanager.AddUser(user, CompanyEnvironment.Usermanager.Users);
+                CompanyEnvironment.Floor.UserLoginRegister();
+                return;
             }
             else
             {
-                candidate.Title = CompanyEnvironment.Texts.ToUpperFirstLetter(title);
+                //Loop så man kan ändra sina uppgifter tills man är klar
+                while (true)
+                {
+					string[] Alts = new string[5];
+					Alts[0] = "Namn";
+					Alts[1] = "Efternamn";
+					Alts[2] = "Födelseår";
+					Alts[3] = "Titel";
+					Alts[4] = "Jag är klar!";
 
-                if (!finished)
-                    RegisterFinished(candidate);
+                    Console.Clear();
+                    CompanyEnvironment.Usermanager.ShowUserData(user);
+
+					int alts = CompanyEnvironment.Texts.Menu(Alts);
+
+                    switch (alts)
+                    {
+                        case 0:
+                            RegisterName(user, 0, true);
+                            break;
+
+                        case 1:
+                            RegisterLastname(user, 1, true);
+                            break;
+
+                        case 2:
+                            RegisterAge(user, 2, true);
+                            break;
+
+                        case 3:
+                            RegisterTitle(user, 3, true);
+                            break;
+
+						case 4:
+							{
+                                //Lägg till i listan på ny medlem
+                                CompanyEnvironment.Usermanager.AddUser(user, 
+                                                                       CompanyEnvironment.Usermanager.Users);
+								Console.Clear();
+								Console.WriteLine("Grattis du är nu medlem, " +
+												  "du kan logga in!" +
+												  Environment.NewLine);
+
+								CompanyEnvironment.Floor.UserLoginRegister();
+							}
+							return;
+                    }
+                }
             }
         }
 
-        public void RegisterAge(User candidate, int level, bool finished = false)
+        public void RegisterTitle(User user, int level, bool finished = false)
+        {
+            Console.WriteLine("Är du en utvecklare, arkitekt eller säljare?");
+
+            int option = CompanyEnvironment.Texts.Menu(CompanyEnvironment.Titles);
+
+            user.Title = CompanyEnvironment.Titles[option];
+
+            if (!finished)
+                RegisterFinished(user);
+
+        }
+
+        public void RegisterAge(User user, int level, bool finished = false)
         {
             int yob;
 			
@@ -154,12 +134,12 @@ namespace CompanyY.Classes.Users
 
             if (CompanyEnvironment.Texts.ValidAge(yob))
             {
-                candidate.YearofBirth = yob;
+                user.YearofBirth = yob;
 
 				if (!finished)
 				{
 					level++;
-					Register(candidate, level);
+					Register(user, level);
 				}
             }
             else
@@ -167,60 +147,60 @@ namespace CompanyY.Classes.Users
 				Console.WriteLine("Något blev fel, " +
 				  "se till att inga tecken och bokstäver finns med!");
 
-                Register(candidate, level, finished);
+                Register(user, level, finished);
             }
         }
 
-        public void RegisterName(User candidate, int level, bool finished = false)
+        public void RegisterName(User user, int level, bool finished = false)
         {
             string name;
 
             Console.WriteLine("Vad heter du?");
 
-            name = Console.ReadLine();
+            name = Console.ReadLine().ToLower();
 
-			if (!ValidName(name))
+			if (!CompanyEnvironment.Texts.ValidName(name))
 			{
 				Console.WriteLine("Något blev fel, " +
 								  "se till att inga tecken och siffror finns med!");
 
-                Register(candidate, level, finished);
+                Register(user, level, finished);
 			}
 			else
 			{
-                candidate.Name = CompanyEnvironment.Texts.ToUpperFirstLetter(name);
+                user.Name = CompanyEnvironment.Texts.ToUpperFirstLetter(name);
 
                 if (!finished)
                 {
                     level++;
-                    Register(candidate, level);
+                    Register(user, level);
                 }
 			}
         }
 
-		public void RegisterLastname(User candidate, int level, bool finished = false)
+		public void RegisterLastname(User user, int level, bool finished = false)
 		{
 			string name;
 
             Console.WriteLine("Vad heter du i efternamn?");
 
-			name = Console.ReadLine();
+            name = Console.ReadLine().ToLower();
 
-			if (!ValidName(name))
+            if (!CompanyEnvironment.Texts.ValidName(name))
 			{
 				Console.WriteLine("Något blev fel, " +
 								  "se till att inga tecken och siffror finns med!");
 
-                Register(candidate, level, finished);
+                Register(user, level, finished);
 			}
 			else
 			{
-                candidate.Lastname = CompanyEnvironment.Texts.ToUpperFirstLetter(name);
+                user.Lastname = CompanyEnvironment.Texts.ToUpperFirstLetter(name);
 				
                 if (!finished)
 				{
 					level++;
-					Register(candidate, level);
+					Register(user, level);
 				}
 			}
 		}

@@ -25,22 +25,11 @@ namespace CompanyY.Classes.Users
             _recruit = recruit;
         }
 
-
-        /// <summary>
-        /// Gets or sets the name.
-        /// </summary>
-        /// <value>The name.</value>
-
         public string Name
         {
             get { return _name; }
 			set { _name = value; }
         }
-
-        /// <summary>
-        /// Gets or sets the lastname.
-        /// </summary>
-        /// <value>The lastname.</value>
 
 		public string Lastname
 		{
@@ -48,32 +37,17 @@ namespace CompanyY.Classes.Users
             set { _lastname = value; }
 		}
 
-        /// <summary>
-        /// Gets or sets the yearof birth.
-        /// </summary>
-        /// <value>The yearof birth.</value>
-
         public int YearofBirth
 		{
             get { return _yob; }
             set { _yob = value; }
 		}
 
-        /// <summary>
-        /// Gets or sets the title.
-        /// </summary>
-        /// <value>The title.</value>
-
         public string Title
         {
             get { return _title; }
             set { _title = value; }
         }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="T:CompanyY.Classes.Users.User"/> is recruit.
-        /// </summary>
-        /// <value><c>true</c> if recruit; otherwise, <c>false</c>.</value>
 
         public bool Recruit
         {

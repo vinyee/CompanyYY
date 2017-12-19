@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using System.Collections.Generic;
 
 namespace CompanyY.Utilities
 {
@@ -15,6 +16,15 @@ namespace CompanyY.Utilities
         {
             return DateTime.Now.Year - year;
         }
+
+		public bool ValidName(string name)
+		{
+			if (name.Length > 2 && name.Length < 15)
+				if (CompanyEnvironment.Texts.OnlyLetters(name))
+					return true;
+
+			return false;
+		}
 
         public bool ValidAge(int year)
         {
@@ -95,6 +105,7 @@ namespace CompanyY.Utilities
 			{//This for loop prints the array out
 				for (int i = 0; i < inArray.Length; i++)
 				{
+
 					if (i == selectedItem)
 					{//This section is what highlights the selected item
 						Console.BackgroundColor = ConsoleColor.Gray;
@@ -153,6 +164,7 @@ namespace CompanyY.Utilities
 			Console.SetCursorPosition(0, bottomOffset);
 
 			Console.CursorVisible = true;
+
 			return selectedItem;
 		}
     }
